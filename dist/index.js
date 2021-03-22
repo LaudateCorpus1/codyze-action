@@ -32,12 +32,13 @@ try {
     core.setOutput("time", time);
 
     // Get the JSON webhook payload for the event that triggered the workflow
-    const payload = JSON.stringify(github.context.payload, undefined, 2)
-    console.log(`The event payload: ${payload}`);
+    //const payload = JSON.stringify(github.context.payload, undefined, 2)
+    //console.log(`The event payload: ${payload}`);
 
     downloadCodyze(`https://github.com/Fraunhofer-AISEC/codyze/releases/download/v${version}/codyze-${version}.zip`, "codyze.zip")
         .then(() => {
             console.log(`Downloaded Codyze`);
+            console.log(cp.execSync(`ls -l *`).toString());
             execCodyze(version, markDirectory, directory)
         })
 } catch (error) {
