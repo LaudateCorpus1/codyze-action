@@ -8,7 +8,7 @@ const fs = require('fs');
 try {
     core.startGroup("test")
     const version = core.getInput('version');
-    console.group(`Using Codyze ${version}`)
+    console.log(`Using Codyze ${version}`)
 
     const directory = core.getInput('directory');
     console.log(`Hello ${directory}!`);
@@ -25,7 +25,6 @@ try {
     core.setOutput("time", time);
     core.endGroup()
     
-
     // Get the JSON webhook payload for the event that triggered the workflow
     //const payload = JSON.stringify(github.context.payload, undefined, 2)
     //console.log(`The event payload: ${payload}`);
@@ -46,13 +45,13 @@ try {
 async function downloadCodyze(version) {
     const url = `https://github.com/Fraunhofer-AISEC/codyze/releases/download/v${version}/codyze-${version}.zip`
 
-    console.group(`Using URL ${url}`)
+    console.log(`Using URL ${url}`)
 
     /*const stream = request({ followRedirect: true, url: url }).pipe(unzip.Extract({ path: './' }))
 
     return new Promise(fulfill => stream.on("finish", fulfill));*/
     const command = `wget ${url} && unzip codyze-${version}.zip`
-    console.log(cp.execSync(command).toString())
+    cp.execSync(command)
 }
 
 function execCodyze(version, markDirectory, directory) {
