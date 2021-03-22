@@ -30,7 +30,7 @@ try {
     //const payload = JSON.stringify(github.context.payload, undefined, 2)
     //console.log(`The event payload: ${payload}`);
 
-    downloadCodyze(`https://github.com/Fraunhofer-AISEC/codyze/releases/download/v${version}/codyze-${version}.zip`, "codyze.zip")
+    downloadCodyze(version, "codyze.zip")
         .then(() => {
             core.startGroup("test")
             console.log(`Downloaded Codyze`);
@@ -43,12 +43,16 @@ try {
     core.setFailed(error.message);
 }
 
-async function downloadCodyze(url) {
+async function downloadCodyze(version) {
+    const url = `https://github.com/Fraunhofer-AISEC/codyze/releases/download/v${version}/codyze-${version}.zip`
+
     console.group(`Using URL ${url}`)
 
-    const stream = request({ followRedirect: true, url: url }).pipe(unzip.Extract({ path: './' }))
+    /*const stream = request({ followRedirect: true, url: url }).pipe(unzip.Extract({ path: './' }))
 
-    return new Promise(fulfill => stream.on("finish", fulfill));
+    return new Promise(fulfill => stream.on("finish", fulfill));*/
+    const command = `wget ${url} && unzip codyze-${version}.zip`
+    console.log(cp.execSync(command).toString())
 }
 
 function execCodyze(version, markDirectory, directory) {
