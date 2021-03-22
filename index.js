@@ -15,10 +15,10 @@ try {
 
     let markDirectory = core.getInput('markDirectory');
 
-    if(markDirectory == "") {
+    if (markDirectory == "") {
         markDirectory = `codyze-${version}/mark`
     }
-    
+
     console.log(`Using MARK directory ${markDirectory}`)
 
     const time = (new Date()).toTimeString();
@@ -29,15 +29,20 @@ try {
     console.log(`The event payload: ${payload}`);
 
     downloadCodyze(`https://github.com/Fraunhofer-AISEC/codyze/releases/download/v${version}/codyze-${version}.zip`, "codyze.zip")
-    execCodyze(version, markDirectory, directory)
+        .then(() => {
+            console.log(`Downloaded Codyze`);
+            execCodyze(version, markDirectory, directory)
+        })
 } catch (error) {
     core.setFailed(error.message);
 }
 
-function downloadCodyze(url) {
+async function downloadCodyze(url) {
     console.group(`Using URL ${url}`)
-    
-    request({followRedirect: true, url: url}).pipe(unzip.Extract({path:'./'}))
+
+    const stream = request({ followRedirect: true, url: url }).pipe(unzip.Extract({ path: './' }))
+
+    return new Promise(fulfill => stream.on("finish", fulfill));
 }
 
 function execCodyze(version, markDirectory, directory) {
