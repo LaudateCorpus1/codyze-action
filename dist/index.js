@@ -11,6 +11,7 @@ const request = __nccwpck_require__(8699);
 const unzip = __nccwpck_require__(1639);
 const cp = __nccwpck_require__(3129);
 const fs = __nccwpck_require__(5747);
+const { exit } = __nccwpck_require__(1765);
 
 try {
     core.startGroup("test")
@@ -31,19 +32,18 @@ try {
     const time = (new Date()).toTimeString();
     core.setOutput("time", time);
     core.endGroup()
-    
+
     // Get the JSON webhook payload for the event that triggered the workflow
     //const payload = JSON.stringify(github.context.payload, undefined, 2)
     //console.log(`The event payload: ${payload}`);
 
+    core.startGroup("Downloading Codyze")
     downloadCodyze(version, "codyze.zip")
         .then(() => {
-            core.startGroup("test")
-            console.log(`Downloaded Codyze`);
-            console.log(cp.execSync(`ls -l *`).toString());
-            console.log(cp.execSync(`ls -l codyze-1.5.0/bin`).toString());
-            execCodyze(version, markDirectory, directory)
             core.endGroup()
+            console.log(execCodyze(version, markDirectory, directory))
+
+            
         })
 } catch (error) {
     core.setFailed(error.message);
@@ -57,20 +57,29 @@ async function downloadCodyze(version) {
     /*const stream = request({ followRedirect: true, url: url }).pipe(unzip.Extract({ path: './' }))
 
     return new Promise(fulfill => stream.on("finish", fulfill));*/
-    const command = `wget ${url} && unzip codyze-${version}.zip`
+    const command = `wget --quiet ${url} && unzip -qo codyze-${version}.zip`
     cp.execSync(command)
 }
 
 function execCodyze(version, markDirectory, directory) {
-    fs.chmodSync(`codyze-${version}/bin/codyze`, 0755);
+    try {
+        fs.chmodSync(`codyze-${version}/bin/codyze`, 0755);
 
-    const command = `codyze-${version}/bin/codyze -c -o - -m ${markDirectory} -s ${directory} --no-good-findings`
+        const command = `codyze-${version}/bin/codyze -c -o - -m ${markDirectory} -s ${directory} --no-good-findings`
 
-    console.log(`Using ${command}`)
+        console.log(`Using ${command}`)
 
-    console.log(cp.execSync(command).toString());
-}
+        return cp.execSync(command).toString();
+    }
+    catch (error) {
+        console.error(error.stderr.toString());
+        console.log(error.stdout.toString());
 
+        if (error.status != 0) {
+            exit(error.status);
+        }
+    }
+};
 
 /***/ }),
 
@@ -60787,6 +60796,14 @@ module.exports = require("os");;
 
 "use strict";
 module.exports = require("path");;
+
+/***/ }),
+
+/***/ 1765:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("process");;
 
 /***/ }),
 
