@@ -5,6 +5,10 @@ inputs:
     description: 'Who to greet'
     required: true
     default: 'src/main/java'
+  version:
+    description: The Codyze version
+    required: true
+    default: 1.5.0
 outputs:
   time: # id of output
     description: 'The time we greeted you'
