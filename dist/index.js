@@ -13,7 +13,7 @@ const cp = __nccwpck_require__(3129);
 const fs = __nccwpck_require__(5747);
 
 try {
-
+    core.startGroup("test")
     const version = core.getInput('version');
     console.group(`Using Codyze ${version}`)
 
@@ -30,6 +30,8 @@ try {
 
     const time = (new Date()).toTimeString();
     core.setOutput("time", time);
+    core.endGroup()
+    
 
     // Get the JSON webhook payload for the event that triggered the workflow
     //const payload = JSON.stringify(github.context.payload, undefined, 2)
@@ -37,9 +39,12 @@ try {
 
     downloadCodyze(`https://github.com/Fraunhofer-AISEC/codyze/releases/download/v${version}/codyze-${version}.zip`, "codyze.zip")
         .then(() => {
+            core.startGroup("test")
             console.log(`Downloaded Codyze`);
             console.log(cp.execSync(`ls -l *`).toString());
+            console.log(cp.execSync(`codyze-1.5.0/bin`).toString());
             execCodyze(version, markDirectory, directory)
+            core.endGroup()
         })
 } catch (error) {
     core.setFailed(error.message);
