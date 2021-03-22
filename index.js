@@ -7,12 +7,12 @@ const fs = require('fs');
 const { exit } = require('process');
 
 try {
-    core.startGroup("test")
+    core.startGroup("Configuration")
     const version = core.getInput('version');
     console.log(`Using Codyze ${version}`)
 
     const directory = core.getInput('directory');
-    console.log(`Hello ${directory}!`);
+    console.log(`Scanning ${directory}!`);
 
     let markDirectory = core.getInput('markDirectory');
 
@@ -35,8 +35,6 @@ try {
         .then(() => {
             core.endGroup()
             console.log(execCodyze(version, markDirectory, directory))
-
-            
         })
 } catch (error) {
     core.setFailed(error.message);

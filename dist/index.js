@@ -14,12 +14,12 @@ const fs = __nccwpck_require__(5747);
 const { exit } = __nccwpck_require__(1765);
 
 try {
-    core.startGroup("test")
+    core.startGroup("Configuration")
     const version = core.getInput('version');
     console.log(`Using Codyze ${version}`)
 
     const directory = core.getInput('directory');
-    console.log(`Hello ${directory}!`);
+    console.log(`Scanning ${directory}!`);
 
     let markDirectory = core.getInput('markDirectory');
 
@@ -42,8 +42,6 @@ try {
         .then(() => {
             core.endGroup()
             console.log(execCodyze(version, markDirectory, directory))
-
-            
         })
 } catch (error) {
     core.setFailed(error.message);

@@ -9,6 +9,14 @@ In the future, it will actually run Codyze
 
 **Required** The directory to scan. Default `"src/main/java"`.
 
+### `markDirectory` 
+
+The directory which contains the MARK files. It uses the built-in MARK files, if omitted.
+
+### `version`
+
+**Required** The version of Codyze to use.
+
 ## Outputs
 
 ### `time`
@@ -17,6 +25,9 @@ The time we greeted you.
 
 ## Example usage
 
-uses: Fraunhofer-AISEC/codyze@v1
+```yaml
+uses: Fraunhofer-AISEC/codyze@v2.1
 with:
   directory: src/main/java
+  markDirectory: src/main/mark
+```
