@@ -35,7 +35,7 @@ try {
             core.startGroup("test")
             console.log(`Downloaded Codyze`);
             console.log(cp.execSync(`ls -l *`).toString());
-            console.log(cp.execSync(`codyze-1.5.0/bin`).toString());
+            console.log(cp.execSync(`ls -l codyze-1.5.0/bin`).toString());
             execCodyze(version, markDirectory, directory)
             core.endGroup()
         })
