@@ -1,19 +1,20 @@
-name: 'Codyze'
-description: 'Run Codyze'
+name: "Codyze"
+description: "Run Codyze"
 inputs:
   directory:
     description: The directory to scan
     required: true
-    default: 'src/main/java'
+    default: "src/main/java"
   markDirectory:
     description: Directory of MARK files
+    required: false
   version:
     description: The Codyze version
     required: true
-    default: 1.4.1  
+    default: 1.5.1
 outputs:
   time:
-    description: 'The time we greeted you'
+    description: "The time we greeted you"
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
+  using: "node12"
+  main: "dist/index.js"
